@@ -284,17 +284,18 @@ const OnboardingFlow = ({ onComplete }) => {
   const remaining = totalInc - totalExp;
 
   const quickExpenses = [
-    { name: "Loyer", amount: 800, category: "Logement", sub: "loyer", icon: "🏠" },
-    { name: "Courses", amount: 350, category: "Vie quotidienne", sub: "alimentation", icon: "🛒" },
-    { name: "Transport", amount: 75, category: "Vie quotidienne", sub: "transport", icon: "🚌" },
-    { name: "Énergie", amount: 100, category: "Vie quotidienne", sub: "factures", icon: "⚡" },
-    { name: "Netflix", amount: 15.49, category: "Abonnements", sub: "Netflix", icon: "🎬" },
-    { name: "Spotify", amount: 10.99, category: "Abonnements", sub: "Spotify", icon: "🎵" },
-    { name: "Téléphone", amount: 20, category: "Abonnements", sub: "téléphone", icon: "📱" },
-    { name: "Internet", amount: 30, category: "Abonnements", sub: "internet", icon: "🌐" },
-    { name: "Sport", amount: 35, category: "Personnel", sub: "sport", icon: "💪" },
-    { name: "Shopping", amount: 80, category: "Personnel", sub: "shopping", icon: "🛍️" },
+    { name: "Loyer", category: "Logement", sub: "loyer", icon: "🏠" },
+    { name: "Courses", category: "Vie quotidienne", sub: "alimentation", icon: "🛒" },
+    { name: "Transport", category: "Vie quotidienne", sub: "transport", icon: "🚌" },
+    { name: "Énergie", category: "Vie quotidienne", sub: "factures", icon: "⚡" },
+    { name: "Netflix", category: "Abonnements", sub: "Netflix", icon: "🎬" },
+    { name: "Spotify", category: "Abonnements", sub: "Spotify", icon: "🎵" },
+    { name: "Téléphone", category: "Abonnements", sub: "téléphone", icon: "📱" },
+    { name: "Internet", category: "Abonnements", sub: "internet", icon: "🌐" },
+    { name: "Sport", category: "Personnel", sub: "sport", icon: "💪" },
+    { name: "Shopping", category: "Personnel", sub: "shopping", icon: "🛍️" },
   ];
+  const [editingExpense, setEditingExpense] = useState(null); // id of expense being edited
   const quickGoals = [
     { name: "Fonds d'urgence", target: 5000, icon: "🛡️" },
     { name: "Voyage", target: 3000, icon: "✈️" },
@@ -306,7 +307,15 @@ const OnboardingFlow = ({ onComplete }) => {
 
   const quickAddExpense = (qe) => {
     if (expenses.find(e => e.name === qe.name)) return;
-    setExpenses(p => [...p, { id: uid(), name: qe.name, amount: qe.amount, frequency: "Mensuelle", category: qe.category, sub: qe.sub, comment: "" }]);
+    const newId = uid();
+    setExpenses(p => [...p, { id: newId, name: qe.name, amount: 0, frequency: "Mensuelle", category: qe.category, sub: qe.sub, comment: "" }]);
+    setEditingExpense(newId);
+  };
+  const updateExpenseAmount = (id, amount) => {
+    setExpenses(p => p.map(e => e.id === id ? { ...e, amount: parseFloat(amount) || 0 } : e));
+  };
+  const updateExpenseName = (id, name) => {
+    setExpenses(p => p.map(e => e.id === id ? { ...e, name } : e));
   };
   const quickAddGoal = (qg) => {
     if (goals.find(g => g.name === qg.name)) return;
@@ -414,68 +423,129 @@ const OnboardingFlow = ({ onComplete }) => {
         {/* STEP 3: Dépenses */}
         {step === 3 && (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <Nutsy size={44} message="Maintenant, tes dépenses mensuelles ! Utilise les raccourcis 🛒" />
+            <Nutsy size={44} message="Quelles sont tes dépenses mensuelles ? Sélectionne et entre tes montants 💰" />
+
+            {/* Quick-add chips - no predefined amounts */}
             <div>
-              <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: 0.5 }}>Ajouter rapidement</p>
+              <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: 0.5 }}>Sélectionne tes dépenses</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                 {quickExpenses.map(qe => {
                   const added = expenses.find(e => e.name === qe.name);
                   return (
-                    <button key={qe.name} onClick={() => quickAddExpense(qe)} style={{
+                    <button key={qe.name} onClick={() => !added && quickAddExpense(qe)} style={{
                       background: added ? "#dcfce7" : "#fff", border: added ? "1.5px solid #86efac" : "1.5px solid #e2e8f0",
-                      borderRadius: 12, padding: "8px 12px", fontSize: 12, cursor: added ? "default" : "pointer",
-                      display: "flex", alignItems: "center", gap: 5, fontFamily: "'DM Sans', sans-serif",
-                      color: added ? "#166534" : "#334155", fontWeight: 600, opacity: added ? 0.7 : 1,
+                      borderRadius: 12, padding: "8px 14px", fontSize: 13, cursor: added ? "default" : "pointer",
+                      display: "flex", alignItems: "center", gap: 6, fontFamily: "'DM Sans', sans-serif",
+                      color: added ? "#166534" : "#334155", fontWeight: 600, transition: "all 0.2s",
                     }}>
-                      <span>{qe.icon}</span> {qe.name} <span style={{ color: "#94a3b8", fontWeight: 400 }}>{qe.amount}€</span>
-                      {added && <span>✓</span>}
+                      <span style={{ fontSize: 16 }}>{qe.icon}</span> {qe.name}
+                      {added && <span style={{ fontSize: 11, marginLeft: 2 }}>✓</span>}
                     </button>
                   );
                 })}
               </div>
             </div>
+
+            {/* Editable expenses list */}
             {expenses.length > 0 && (
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <p style={{ margin: 0, fontSize: 12, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: 0.5 }}>Tes dépenses ({expenses.length})</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <p style={{ margin: 0, fontSize: 12, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: 0.5 }}>
+                  Tes dépenses ({expenses.length}) — entre les montants
+                </p>
                 {expenses.map(exp => (
-                  <div key={exp.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#fff", borderRadius: 12, padding: "10px 14px", border: "1px solid #f1f5f9" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <span style={{ fontSize: 14 }}>{expenseCategoryIcons[exp.category] || "📦"}</span>
-                      <div><div style={{ fontSize: 13, fontWeight: 600, color: "#0f172a" }}>{exp.name}</div><div style={{ fontSize: 10, color: "#94a3b8" }}>{exp.category}</div></div>
+                  <div key={exp.id} style={{
+                    background: "#fff", borderRadius: 14, padding: "12px 14px",
+                    border: editingExpense === exp.id ? "2px solid #10b981" : (exp.amount > 0 ? "1px solid #e2e8f0" : "2px solid #f59e0b"),
+                    transition: "all 0.2s",
+                  }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <span style={{ fontSize: 18 }}>{expenseCategoryIcons[exp.category] || "📦"}</span>
+                      <div style={{ flex: 1 }}>
+                        <input
+                          style={{ ...inputStyle, border: "none", padding: "2px 0", fontSize: 14, fontWeight: 700, color: "#0f172a", background: "transparent" }}
+                          value={exp.name}
+                          onChange={e => updateExpenseName(exp.id, e.target.value)}
+                          onFocus={() => setEditingExpense(exp.id)}
+                        />
+                        <div style={{ fontSize: 10, color: "#94a3b8" }}>{exp.category}</div>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 4, minWidth: 100 }}>
+                        <input
+                          style={{
+                            ...inputStyle,
+                            width: 70, padding: "8px 10px", fontSize: 15, fontWeight: 800,
+                            color: exp.amount > 0 ? "#ef4444" : "#94a3b8", textAlign: "right",
+                            border: exp.amount > 0 ? "2px solid #fecaca" : "2px solid #fde68a",
+                            borderRadius: 10, background: exp.amount > 0 ? "#fef2f2" : "#fffbeb",
+                          }}
+                          type="number"
+                          placeholder="0"
+                          value={exp.amount || ""}
+                          onChange={e => updateExpenseAmount(exp.id, e.target.value)}
+                          onFocus={() => setEditingExpense(exp.id)}
+                          onBlur={() => setEditingExpense(null)}
+                        />
+                        <span style={{ fontSize: 14, fontWeight: 700, color: "#94a3b8" }}>€</span>
+                      </div>
+                      <button onClick={() => setExpenses(p => p.filter(e => e.id !== exp.id))} style={{
+                        background: "none", border: "none", cursor: "pointer", fontSize: 16, color: "#cbd5e1", padding: "2px 4px",
+                      }}>✕</button>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <span style={{ fontSize: 14, fontWeight: 700, color: "#ef4444" }}>-{fmt(exp.amount)}€</span>
-                      <button onClick={() => setExpenses(p => p.filter(e => e.id !== exp.id))} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 14, color: "#cbd5e1", padding: 2 }}>✕</button>
-                    </div>
+                    {exp.amount === 0 && (
+                      <div style={{ fontSize: 11, color: "#f59e0b", marginTop: 4, marginLeft: 28 }}>
+                        ⚠️ Entre le montant mensuel
+                      </div>
+                    )}
                   </div>
                 ))}
-                <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 4px", fontSize: 14, fontWeight: 700 }}>
-                  <span style={{ color: "#64748b" }}>Total :</span><span style={{ color: "#ef4444", fontFamily: "'Sora', sans-serif" }}>{fmt(totalExp)}€</span>
+
+                {/* Total */}
+                <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 4px", fontSize: 15, fontWeight: 700, borderTop: "2px solid #f1f5f9", marginTop: 4 }}>
+                  <span style={{ color: "#475569" }}>Total mensuel :</span>
+                  <span style={{ color: "#ef4444", fontFamily: "'Sora', sans-serif", fontSize: 17 }}>{fmt(totalExp)}€</span>
                 </div>
               </div>
             )}
+
+            {/* Manual add */}
             <details style={{ background: "#fff", borderRadius: 16, border: "1px solid #e2e8f0", overflow: "hidden" }}>
-              <summary style={{ padding: "14px 16px", fontSize: 13, fontWeight: 700, color: "#475569", cursor: "pointer" }}>✏️ Ajouter manuellement</summary>
+              <summary style={{ padding: "14px 16px", fontSize: 13, fontWeight: 700, color: "#475569", cursor: "pointer" }}>✏️ Ajouter une dépense personnalisée</summary>
               <div style={{ padding: "0 16px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
                 <div style={{ display: "flex", gap: 8 }}>
-                  <input style={{ ...inputStyle, flex: 1 }} placeholder="Nom" value={tempExpense.name} onChange={e => setTempExpense(p => ({ ...p, name: e.target.value }))} />
-                  <input style={{ ...inputStyle, width: 100 }} type="number" placeholder="€" value={tempExpense.amount} onChange={e => setTempExpense(p => ({ ...p, amount: e.target.value }))} />
+                  <input style={{ ...inputStyle, flex: 1 }} placeholder="Nom de la dépense" value={tempExpense.name} onChange={e => setTempExpense(p => ({ ...p, name: e.target.value }))} />
+                  <input style={{ ...inputStyle, width: 90 }} type="number" placeholder="Montant €" value={tempExpense.amount} onChange={e => setTempExpense(p => ({ ...p, amount: e.target.value }))} />
                 </div>
-                <div style={{ display: "flex", gap: 8 }}>
-                  <select style={{ ...selectStyle, flex: 1 }} value={tempExpense.category} onChange={e => setTempExpense(p => ({ ...p, category: e.target.value, sub: EXPENSE_SUBS[e.target.value]?.[0] || "" }))}>{EXPENSE_CATEGORIES.map(c => <option key={c}>{c}</option>)}</select>
-                  {EXPENSE_SUBS[tempExpense.category] && <select style={{ ...selectStyle, flex: 1 }} value={tempExpense.sub} onChange={e => setTempExpense(p => ({ ...p, sub: e.target.value }))}>{EXPENSE_SUBS[tempExpense.category].map(s => <option key={s}>{s}</option>)}</select>}
-                </div>
+                <select style={selectStyle} value={tempExpense.category} onChange={e => setTempExpense(p => ({ ...p, category: e.target.value, sub: EXPENSE_SUBS[e.target.value]?.[0] || "" }))}>{EXPENSE_CATEGORIES.map(c => <option key={c}>{c}</option>)}</select>
                 <button onClick={addExpense} style={{ ...btnPrimary, padding: "10px", fontSize: 13, opacity: (tempExpense.name && tempExpense.amount) ? 1 : 0.4 }} disabled={!tempExpense.name || !tempExpense.amount}>+ Ajouter</button>
               </div>
             </details>
-            {expenses.length > 0 && (
-              <div style={{ background: remaining >= 0 ? "linear-gradient(135deg, #ecfdf5, #f0fdf4)" : "linear-gradient(135deg, #fef2f2, #fff1f2)", border: `1px solid ${remaining >= 0 ? "#bbf7d0" : "#fecaca"}`, borderRadius: 16, padding: 16, textAlign: "center" }}>
+
+            {/* Balance preview */}
+            {expenses.length > 0 && totalExp > 0 && (
+              <div style={{
+                background: remaining >= 0 ? "linear-gradient(135deg, #ecfdf5, #f0fdf4)" : "linear-gradient(135deg, #fef2f2, #fff1f2)",
+                border: `1px solid ${remaining >= 0 ? "#bbf7d0" : "#fecaca"}`, borderRadius: 16, padding: 16, textAlign: "center",
+              }}>
                 <div style={{ fontSize: 12, color: "#64748b", fontWeight: 600, marginBottom: 4 }}>Il te reste</div>
                 <div style={{ fontSize: 28, fontWeight: 800, fontFamily: "'Sora', sans-serif", color: remaining >= 0 ? "#059669" : "#ef4444" }}>{fmt(remaining)}€</div>
-                <div style={{ fontSize: 12, color: "#94a3b8" }}>par mois</div>
+                <div style={{ fontSize: 12, color: "#94a3b8" }}>par mois après dépenses</div>
               </div>
             )}
-            <button onClick={goNext} style={{ ...btnPrimary, marginTop: 4 }}>Continuer →</button>
+
+            {/* Warning if some expenses have no amount */}
+            {expenses.length > 0 && expenses.some(e => e.amount === 0) && (
+              <div style={{ background: "#fffbeb", borderRadius: 12, padding: "10px 14px", border: "1px solid #fde68a", display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ fontSize: 16 }}>⚠️</span>
+                <span style={{ fontSize: 12, color: "#92400e" }}>Certaines dépenses n'ont pas encore de montant</span>
+              </div>
+            )}
+
+            <button onClick={goNext} style={{
+              ...btnPrimary, marginTop: 4,
+              opacity: (expenses.length > 0 && expenses.every(e => e.amount > 0)) ? 1 : 0.5,
+            }} disabled={expenses.length === 0 || expenses.some(e => e.amount === 0)}>
+              Continuer →
+            </button>
           </div>
         )}
 

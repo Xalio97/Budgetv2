@@ -126,9 +126,9 @@ const Nutsy = ({ size = 48, message, mood = "happy" }) => (
     </svg>
     {message && (
       <div style={{
-        background: T.nutsy.bubble,
-        border: `1px solid ${T.nutsy.bubbleBorder}`, borderRadius: 14,
-        padding: "10px 16px", fontSize: 13.5, color: T.nutsy.bubbleText,
+        background: "linear-gradient(135deg, #f0fdf4, #ecfdf5)",
+        border: "1px solid #bbf7d0", borderRadius: 14,
+        padding: "10px 16px", fontSize: 13.5, color: "#166534",
         maxWidth: 260, lineHeight: 1.55, position: "relative",
       }}>
         <div style={{
@@ -136,7 +136,7 @@ const Nutsy = ({ size = 48, message, mood = "happy" }) => (
           width: 0, height: 0,
           borderTop: "6px solid transparent",
           borderBottom: "6px solid transparent",
-          borderRight: `6px solid ${T.nutsy.bubbleBorder}`,
+          borderRight: "6px solid #bbf7d0",
         }} />
         {message}
       </div>
@@ -264,20 +264,20 @@ const EXPENSE_SUBS = {
 const fmt = (n) => n.toLocaleString("fr-FR", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
 // ─── Styled ─────────────────────────────────────────────────
-const inputStyle = { width: "100%", padding: "12px 14px", border: `2px solid ${T.inputBorder}`, borderRadius: 12, fontSize: 14, fontFamily: "'DM Sans', sans-serif", outline: "none", boxSizing: "border-box", transition: "border-color 0.2s", background: T.inputBg, color: T.text };
-const selectStyle = { ...inputStyle, appearance: "none", background: `${T.selectBg} url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%2394a3b8' stroke-width='2'/%3E%3C/svg%3E") right 12px center no-repeat` };
-const labelStyle = { fontSize: 12, fontWeight: 600, color: T.textMuted, marginBottom: 4, display: "block" };
+const inputStyle = { width: "100%", padding: "12px 14px", border: "2px solid #e2e8f0", borderRadius: 12, fontSize: 14, fontFamily: "'DM Sans', sans-serif", outline: "none", boxSizing: "border-box", transition: "border-color 0.2s" };
+const selectStyle = { ...inputStyle, appearance: "none", background: "#fff url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%2394a3b8' stroke-width='2'/%3E%3C/svg%3E\") right 12px center no-repeat" };
+const labelStyle = { fontSize: 12, fontWeight: 600, color: "#64748b", marginBottom: 4, display: "block" };
 const btnPrimary = { background: "linear-gradient(135deg, #10b981, #059669)", color: "#fff", border: "none", borderRadius: 14, padding: "14px 24px", fontSize: 15, fontWeight: 700, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", width: "100%", letterSpacing: 0.3 };
-const btnSecondary = { background: "transparent", color: T.textMuted, border: `2px solid ${T.border}`, borderRadius: 14, padding: "12px 24px", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", width: "100%" };
+const btnSecondary = { background: "transparent", color: "#64748b", border: "2px solid #e2e8f0", borderRadius: 14, padding: "12px 24px", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", width: "100%" };
 
 const Modal = ({ open, onClose, title, children }) => {
   if (!open) return null;
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.45)", backdropFilter: "blur(6px)", zIndex: 1000, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
-      <div onClick={e => e.stopPropagation()} style={{ background: T.bgModal, borderRadius: "24px 24px 0 0", width: "100%", maxWidth: 480, maxHeight: "85vh", overflow: "auto", padding: "28px 24px 32px", animation: "slideUp 0.3s ease" }}>
+      <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: "24px 24px 0 0", width: "100%", maxWidth: 480, maxHeight: "85vh", overflow: "auto", padding: "28px 24px 32px", animation: "slideUp 0.3s ease" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-          <h3 style={{ margin: 0, fontSize: 18, color: T.text, fontFamily: "'Sora', sans-serif" }}>{title}</h3>
-          <button onClick={onClose} style={{ background: T.closeBg, border: "none", borderRadius: 12, width: 36, height: 36, cursor: "pointer", fontSize: 18, color: T.closeText, display: "grid", placeItems: "center" }}>✕</button>
+          <h3 style={{ margin: 0, fontSize: 18, color: "#0f172a", fontFamily: "'Sora', sans-serif" }}>{title}</h3>
+          <button onClick={onClose} style={{ background: "#f1f5f9", border: "none", borderRadius: 12, width: 36, height: 36, cursor: "pointer", fontSize: 18, color: "#64748b", display: "grid", placeItems: "center" }}>✕</button>
         </div>
         {children}
       </div>
@@ -287,9 +287,9 @@ const Modal = ({ open, onClose, title, children }) => {
 
 const Card = ({ children, style: s = {}, delay = 0 }) => (
   <div style={{
-    background: T.bgCard, borderRadius: 20, padding: "20px",
+    background: "#fff", borderRadius: 20, padding: "20px",
     boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03)",
-    border: `1px solid ${T.borderLight}`, boxShadow: T.cardShadow,
+    border: "1px solid #f1f5f9",
     animation: `cardIn 0.5s ease ${delay}ms both`, ...s,
   }}>{children}</div>
 );
@@ -736,7 +736,7 @@ const OnboardingFlow = ({ onComplete }) => {
               ))}
             </div>
             {remaining > 0 && (
-              <div style={{ background: "#fff", borderRadius: 18, padding: 20, border: `1px solid ${T.borderLight}`, boxShadow: T.cardShadow, display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <div style={{ background: "#fff", borderRadius: 18, padding: 20, border: "1px solid #f1f5f9", display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <DonutChart size={140} thickness={24} centerLabel="Reste" centerValue={`${fmt(remaining)}€`}
                   segments={remaining > 0 ? [
                     { pct: (Math.min(splitRule.epargneFixed || 0, remaining) / remaining) * 100, color: "#10b981" },
@@ -799,6 +799,59 @@ function BudgetFlowMain({ authUser, onLogout }) {
     setThemeMode(next);
     try { localStorage.setItem(THEME_KEY, next); } catch {}
   };
+
+  // Theme-aware style overrides (inside component where T is available)
+  const tInput = { ...inputStyle, border: `2px solid ${T.inputBorder}`, background: T.inputBg, color: T.text };
+  const tSelect = { ...selectStyle, background: `${T.selectBg} url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%2394a3b8' stroke-width='2'/%3E%3C/svg%3E") right 12px center no-repeat`, color: T.text };
+  const tLabel = { ...labelStyle, color: T.textMuted };
+  const tBtnSecondary = { ...btnSecondary, color: T.textMuted, border: `2px solid ${T.border}` };
+
+  // Themed wrappers for module-level components
+  const ThemedNutsy = ({ size = 48, message, mood = "happy" }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      <Nutsy size={size} mood={mood} />
+      {message && !message && null}
+      {message && (
+        <div style={{
+          background: T.nutsy.bubble,
+          border: `1px solid ${T.nutsy.bubbleBorder}`, borderRadius: 14,
+          padding: "10px 16px", fontSize: 13.5, color: T.nutsy.bubbleText,
+          maxWidth: 260, lineHeight: 1.55, position: "relative",
+        }}>
+          <div style={{
+            position: "absolute", left: -6, top: 12, width: 0, height: 0,
+            borderTop: "6px solid transparent", borderBottom: "6px solid transparent",
+            borderRight: `6px solid ${T.nutsy.bubbleBorder}`,
+          }} />
+          {message}
+        </div>
+      )}
+    </div>
+  );
+
+  const ThemedModal = ({ open, onClose, title, children }) => {
+    if (!open) return null;
+    return (
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 1000, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
+        <div onClick={e => e.stopPropagation()} style={{ background: T.bgModal, borderRadius: "24px 24px 0 0", width: "100%", maxWidth: 480, maxHeight: "85vh", overflow: "auto", padding: "28px 24px 32px", animation: "slideUp 0.3s ease" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+            <h3 style={{ margin: 0, fontSize: 18, color: T.text, fontFamily: "'Sora', sans-serif" }}>{title}</h3>
+            <button onClick={onClose} style={{ background: T.closeBg, border: "none", borderRadius: 12, width: 36, height: 36, cursor: "pointer", fontSize: 18, color: T.closeText, display: "grid", placeItems: "center" }}>✕</button>
+          </div>
+          {children}
+        </div>
+      </div>
+    );
+  };
+
+  const ThemedCard = ({ children, delay = 0, style: s = {} }) => (
+    <div style={{
+      background: T.bgCard, borderRadius: 20, padding: "20px",
+      border: `1px solid ${T.borderLight}`, boxShadow: T.cardShadow,
+      animation: `cardIn 0.4s ease ${delay}ms both`,
+      ...s,
+    }}>{children}</div>
+  );
   const [data, setData] = useState(null);
   const [onboarded, setOnboarded] = useState(null);
   const [view, setView] = useState("dashboard");
@@ -933,7 +986,7 @@ function BudgetFlowMain({ authUser, onLogout }) {
     const cardBg = inline ? "transparent" : "#fff";
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        {!inline && <Nutsy size={40} message="Configure combien tu mets de côté chaque mois !" />}
+        {!inline && <ThemedNutsy size={40} message="Configure combien tu mets de côté chaque mois !" />}
 
         {/* Mode selector */}
         <div>
@@ -1064,9 +1117,9 @@ function BudgetFlowMain({ authUser, onLogout }) {
       <div style={{ padding: "20px 16px", color: T.text }}>
         {view === "dashboard" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <Card delay={0}><Nutsy size={44} message={nutsyMsg.msg} mood={nutsyMsg.mood} /></Card>
+            <ThemedCard delay={0}><ThemedNutsy size={44} message={nutsyMsg.msg} mood={nutsyMsg.mood} /></ThemedCard>
             {/* Waterfall: where does your money go? */}
-            <Card delay={100}>
+            <ThemedCard delay={100}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
                 <h3 style={{ margin: 0, fontSize: 15, fontFamily: "'Sora', sans-serif" }}>Où va ton argent ?</h3>
                 <button onClick={() => setView("profil")} style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 8, padding: "4px 10px", fontSize: 11, color: "#059669", cursor: "pointer", fontWeight: 600 }}>⚙️ Modifier</button>
@@ -1125,8 +1178,8 @@ function BudgetFlowMain({ authUser, onLogout }) {
                   { pct: remaining > 0 ? (disponibleLoisirs / remaining) * 100 : 0, color: "#f59e0b" },
                 ]} />
               </div>}
-            </Card>
-            <Card delay={200}>
+            </ThemedCard>
+            <ThemedCard delay={200}>
               <h3 style={{ margin: "0 0 14px", fontSize: 15, fontFamily: "'Sora', sans-serif" }}>Dépenses par catégorie</h3>
               {expSegments.length > 0 ? (
                 <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
@@ -1139,9 +1192,9 @@ function BudgetFlowMain({ authUser, onLogout }) {
                   ))}</div>
                 </div>
               ) : <p style={{ fontSize: 13, color: "#94a3b8", textAlign: "center" }}>Aucune dépense enregistrée</p>}
-            </Card>
+            </ThemedCard>
             {data.goals.length > 0 && (
-              <Card delay={300}>
+              <ThemedCard delay={300}>
                 <h3 style={{ margin: "0 0 14px", fontSize: 15, fontFamily: "'Sora', sans-serif" }}>Mes objectifs</h3>
                 {data.goals.map(g => { const pct = g.target > 0 ? (g.saved / g.target) * 100 : 0; return (
                   <div key={g.id} style={{ marginBottom: 14 }}>
@@ -1149,7 +1202,7 @@ function BudgetFlowMain({ authUser, onLogout }) {
                     <ProgressBar pct={pct} color={pct >= 100 ? "#10b981" : "#3b82f6"} height={8} />
                   </div>
                 ); })}
-              </Card>
+              </ThemedCard>
             )}
           </div>
         )}
@@ -1160,14 +1213,14 @@ function BudgetFlowMain({ authUser, onLogout }) {
               <h2 style={{ margin: 0, fontSize: 20, fontFamily: "'Sora', sans-serif" }}>Mes Revenus</h2>
               <button onClick={() => { setEditItem(null); setModal("income"); }} style={{ background: "linear-gradient(135deg, #10b981, #059669)", color: "#fff", border: "none", borderRadius: 14, padding: "10px 18px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>+ Ajouter</button>
             </div>
-            {incSegments.length > 0 && <Card delay={0}><div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}><DonutChart size={130} thickness={22} centerLabel="Revenus" centerValue={`${fmt(totalIncome)}€`} segments={incSegments.map(s => ({ pct: s.pct, color: s.color }))} /></div></Card>}
+            {incSegments.length > 0 && <ThemedCard delay={0}><div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}><DonutChart size={130} thickness={22} centerLabel="Revenus" centerValue={`${fmt(totalIncome)}€`} segments={incSegments.map(s => ({ pct: s.pct, color: s.color }))} /></div></ThemedCard>}
             {data.incomes.map((inc, i) => (
               <Card key={inc.id} delay={i * 80}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <div><div style={{ fontSize: 14, fontWeight: 700 }}>{inc.name}</div><div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }}><span style={{ background: incomeCategoryColors[inc.category] + "20", color: incomeCategoryColors[inc.category], padding: "2px 8px", borderRadius: 6, fontWeight: 600, fontSize: 11 }}>{inc.category}</span><span style={{ marginLeft: 8 }}>{inc.frequency}</span></div></div>
                   <div style={{ textAlign: "right" }}><div style={{ fontSize: 17, fontWeight: 800, color: "#059669", fontFamily: "'Sora', sans-serif" }}>+{fmt(inc.amount)}€</div><div style={{ display: "flex", gap: 6, marginTop: 6, justifyContent: "flex-end" }}><button onClick={() => { setEditItem(inc); setModal("income"); }} style={{ background: T.pillBg, border: "none", borderRadius: 8, padding: "4px 10px", fontSize: 11, cursor: "pointer" }}>✏️</button><button onClick={() => deleteIncome(inc.id)} style={{ background: "#fef2f2", border: "none", borderRadius: 8, padding: "4px 10px", fontSize: 11, cursor: "pointer" }}>🗑️</button></div></div>
                 </div>
-              </Card>
+              </ThemedCard>
             ))}
           </div>
         )}
@@ -1178,12 +1231,12 @@ function BudgetFlowMain({ authUser, onLogout }) {
               <h2 style={{ margin: 0, fontSize: 20, fontFamily: "'Sora', sans-serif" }}>Mes Dépenses</h2>
               <button onClick={() => { setEditItem(null); setModal("expense"); }} style={{ background: "linear-gradient(135deg, #ef4444, #dc2626)", color: "#fff", border: "none", borderRadius: 14, padding: "10px 18px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>+ Ajouter</button>
             </div>
-            {expSegments.length > 0 && <Card delay={0}><div style={{ display: "flex", gap: 16, alignItems: "center" }}><DonutChart size={120} thickness={20} centerLabel="Total" centerValue={`${fmt(totalExpense)}€`} segments={expSegments.map(s => ({ pct: s.pct, color: s.color }))} /><div style={{ flex: 1 }}>{expSegments.map(s => (<div key={s.label} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}><span style={{ fontSize: 14 }}>{s.icon}</span><span style={{ flex: 1, fontSize: 12, color: T.textSub }}>{s.label}</span><span style={{ fontSize: 13, fontWeight: 700, color: s.color }}>{fmt(s.value)}€</span></div>))}</div></div></Card>}
+            {expSegments.length > 0 && <ThemedCard delay={0}><div style={{ display: "flex", gap: 16, alignItems: "center" }}><DonutChart size={120} thickness={20} centerLabel="Total" centerValue={`${fmt(totalExpense)}€`} segments={expSegments.map(s => ({ pct: s.pct, color: s.color }))} /><div style={{ flex: 1 }}>{expSegments.map(s => (<div key={s.label} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}><span style={{ fontSize: 14 }}>{s.icon}</span><span style={{ flex: 1, fontSize: 12, color: T.textSub }}>{s.label}</span><span style={{ fontSize: 13, fontWeight: 700, color: s.color }}>{fmt(s.value)}€</span></div>))}</div></div></ThemedCard>}
             {EXPENSE_CATEGORIES.map(cat => {
               const items = data.expenses.filter(e => e.category === cat); if (!items.length) return null;
               return (<div key={cat}>
                 <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8, marginTop: 4 }}><span style={{ fontSize: 16 }}>{expenseCategoryIcons[cat]}</span><span style={{ fontSize: 13, fontWeight: 700, color: T.textSub, textTransform: "uppercase", letterSpacing: 0.5 }}>{cat}</span><span style={{ fontSize: 12, color: expenseCategoryColors[cat], fontWeight: 700 }}>{fmt(items.reduce((s, e) => s + e.amount, 0))}€</span></div>
-                {items.map((exp, i) => (<Card key={exp.id} delay={i * 60} style={{ marginBottom: 8 }}><div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}><div><div style={{ fontSize: 14, fontWeight: 600 }}>{exp.name}</div><div style={{ fontSize: 11, color: "#94a3b8", marginTop: 2 }}>{exp.sub && <span style={{ background: T.pillBg, padding: "1px 6px", borderRadius: 4, marginRight: 6 }}>{exp.sub}</span>}{exp.frequency}</div></div><div style={{ textAlign: "right" }}><div style={{ fontSize: 16, fontWeight: 800, color: "#ef4444", fontFamily: "'Sora', sans-serif" }}>-{fmt(exp.amount)}€</div><div style={{ display: "flex", gap: 6, marginTop: 4, justifyContent: "flex-end" }}><button onClick={() => { setEditItem(exp); setModal("expense"); }} style={{ background: T.pillBg, border: "none", borderRadius: 8, padding: "4px 10px", fontSize: 11, cursor: "pointer" }}>✏️</button><button onClick={() => deleteExpense(exp.id)} style={{ background: "#fef2f2", border: "none", borderRadius: 8, padding: "4px 10px", fontSize: 11, cursor: "pointer" }}>🗑️</button></div></div></div></Card>))}
+                {items.map((exp, i) => (<Card key={exp.id} delay={i * 60} style={{ marginBottom: 8 }}><div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}><div><div style={{ fontSize: 14, fontWeight: 600 }}>{exp.name}</div><div style={{ fontSize: 11, color: "#94a3b8", marginTop: 2 }}>{exp.sub && <span style={{ background: T.pillBg, padding: "1px 6px", borderRadius: 4, marginRight: 6 }}>{exp.sub}</span>}{exp.frequency}</div></div><div style={{ textAlign: "right" }}><div style={{ fontSize: 16, fontWeight: 800, color: "#ef4444", fontFamily: "'Sora', sans-serif" }}>-{fmt(exp.amount)}€</div><div style={{ display: "flex", gap: 6, marginTop: 4, justifyContent: "flex-end" }}><button onClick={() => { setEditItem(exp); setModal("expense"); }} style={{ background: T.pillBg, border: "none", borderRadius: 8, padding: "4px 10px", fontSize: 11, cursor: "pointer" }}>✏️</button><button onClick={() => deleteExpense(exp.id)} style={{ background: "#fef2f2", border: "none", borderRadius: 8, padding: "4px 10px", fontSize: 11, cursor: "pointer" }}>🗑️</button></div></div></div></ThemedCard>))}
               </div>);
             })}
           </div>
@@ -1195,7 +1248,7 @@ function BudgetFlowMain({ authUser, onLogout }) {
               <h2 style={{ margin: 0, fontSize: 20, fontFamily: "'Sora', sans-serif" }}>Objectifs</h2>
               <button onClick={() => { setEditItem(null); setModal("goal"); }} style={{ background: "linear-gradient(135deg, #8b5cf6, #7c3aed)", color: "#fff", border: "none", borderRadius: 14, padding: "10px 18px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>+ Objectif</button>
             </div>
-            <Card delay={0}><Nutsy size={40} message="Définis tes rêves et je t'aide à les atteindre ! ✨" /></Card>
+            <ThemedCard delay={0}><ThemedNutsy size={40} message="Définis tes rêves et je t'aide à les atteindre ! ✨" /></ThemedCard>
             {data.goals.map((g, i) => { const pct = g.target > 0 ? (g.saved / g.target) * 100 : 0; const rem = g.target - g.saved; const mo = split.projets > 0 ? Math.ceil(Math.max(rem, 0) / split.projets) : Infinity; return (
               <Card key={g.id} delay={(i+1)*100}>
                 <div style={{ display: "flex", gap: 14 }}>
@@ -1206,24 +1259,24 @@ function BudgetFlowMain({ authUser, onLogout }) {
                     <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}><span style={{ fontWeight: 700, color: pct >= 100 ? "#059669" : "#7c3aed", fontFamily: "'Sora', sans-serif" }}>{fmt(g.saved)}€</span><span style={{ color: "#94a3b8" }}>{pct.toFixed(0)}%</span><span style={{ color: "#64748b", fontWeight: 600 }}>{fmt(g.target)}€</span></div>
                   </div>
                 </div>
-              </Card>
+              </ThemedCard>
             ); })}
-            {data.goals.length === 0 && <Card delay={100} style={{ textAlign: "center", padding: 40 }}><div style={{ fontSize: 48, marginBottom: 12 }}>🎯</div><p style={{ fontSize: 15, color: "#64748b", margin: 0 }}>Aucun objectif</p></Card>}
+            {data.goals.length === 0 && <ThemedCard delay={100} style={{ textAlign: "center", padding: 40 }}><div style={{ fontSize: 48, marginBottom: 12 }}>🎯</div><p style={{ fontSize: 15, color: "#64748b", margin: 0 }}>Aucun objectif</p></ThemedCard>}
           </div>
         )}
 
         {view === "profil" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <h2 style={{ margin: 0, fontSize: 20, fontFamily: "'Sora', sans-serif" }}>Mon Profil Budget</h2>
-            <Card delay={0}><Nutsy size={44} message={`${data.userName}, ajuste ton profil à tout moment ! Tu peux choisir exactement combien mettre de côté 🎯`} /></Card>
+            <ThemedCard delay={0}><ThemedNutsy size={44} message={`${data.userName}, ajuste ton profil à tout moment ! Tu peux choisir exactement combien mettre de côté 🎯`} /></ThemedCard>
 
             {/* Inline split editor */}
-            <Card delay={100}>
+            <ThemedCard delay={100}>
               <SplitEditor inline />
-            </Card>
+            </ThemedCard>
 
             {/* Simulation */}
-            <Card delay={200}>
+            <ThemedCard delay={200}>
               <h3 style={{ margin: "0 0 14px", fontSize: 15, fontFamily: "'Sora', sans-serif" }}>📊 Simulation sur 12 mois</h3>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                 {[{ l: "Épargne cumulée", v: split.epargne * 12, c: "#10b981", i: "🏦" },{ l: "Investissements", v: split.investissement * 12, c: "#3b82f6", i: "📈" },{ l: "Budget loisirs", v: disponibleLoisirs * 12, c: "#f59e0b", i: "🎉" }].map(x => (
@@ -1234,16 +1287,16 @@ function BudgetFlowMain({ authUser, onLogout }) {
                   </div>
                 ))}
               </div>
-            </Card>
+            </ThemedCard>
 
             {/* Growth chart */}
-            <Card delay={300}>
+            <ThemedCard delay={300}>
               <h3 style={{ margin: "0 0 14px", fontSize: 15, fontFamily: "'Sora', sans-serif" }}>Croissance de l'épargne</h3>
               <BarChart data={Array.from({ length: 6 }, (_, i) => ({ label: `M${(i+1)*2}`, value: split.epargne*(i+1)*2, color: `hsl(${152-i*3},76%,${42+i*4}%)` }))} />
-            </Card>
+            </ThemedCard>
 
             {/* Suggestions */}
-            <Card delay={400}>
+            <ThemedCard delay={400}>
               <h3 style={{ margin: "0 0 14px", fontSize: 15, fontFamily: "'Sora', sans-serif" }}>💡 Conseils de Nutsy</h3>
               {[
                 { t: `Avec ${fmt(split.epargne)}€/mois d'épargne, tu auras ${fmt(split.epargne * 6)}€ en 6 mois !`, c: "#10b981" },
@@ -1255,7 +1308,7 @@ function BudgetFlowMain({ authUser, onLogout }) {
                   <span style={{ fontSize: 12 }}>🐿️</span><span style={{ fontSize: 13, color: T.textSub, lineHeight: 1.5 }}>{s.t}</span>
                 </div>
               ))}
-            </Card>
+            </ThemedCard>
           </div>
         )}
       </div>
@@ -1275,10 +1328,10 @@ function BudgetFlowMain({ authUser, onLogout }) {
       {toast && <div style={{ position: "fixed", top: 20, left: "50%", transform: "translateX(-50%)", background: "#0f172a", color: "#fff", padding: "12px 20px", borderRadius: 14, fontSize: 14, fontWeight: 600, zIndex: 2000, boxShadow: "0 10px 40px rgba(0,0,0,0.2)", display: "flex", alignItems: "center", gap: 8 }}><span>🐿️</span> {toast}</div>}
 
       {/* Modals */}
-      <Modal open={modal === "income"} onClose={() => { setModal(null); setEditItem(null); }} title={editItem ? "Modifier" : "Ajouter un revenu"}><IncomeForm item={editItem} onDone={() => { setModal(null); setEditItem(null); }} /></Modal>
-      <Modal open={modal === "expense"} onClose={() => { setModal(null); setEditItem(null); }} title={editItem ? "Modifier" : "Ajouter une dépense"}><ExpenseForm item={editItem} onDone={() => { setModal(null); setEditItem(null); }} /></Modal>
-      <Modal open={modal === "goal"} onClose={() => { setModal(null); setEditItem(null); }} title={editItem ? "Modifier" : "Nouvel objectif"}><GoalForm item={editItem} onDone={() => { setModal(null); setEditItem(null); }} /></Modal>
-      <Modal open={modal === "split"} onClose={() => setModal(null)} title="Mon Profil Budget"><SplitEditor onDone={() => setModal(null)} /></Modal>
+      <ThemedModal open={modal === "income"} onClose={() => { setModal(null); setEditItem(null); }} title={editItem ? "Modifier" : "Ajouter un revenu"}><IncomeForm item={editItem} onDone={() => { setModal(null); setEditItem(null); }} /></ThemedModal>
+      <ThemedModal open={modal === "expense"} onClose={() => { setModal(null); setEditItem(null); }} title={editItem ? "Modifier" : "Ajouter une dépense"}><ExpenseForm item={editItem} onDone={() => { setModal(null); setEditItem(null); }} /></ThemedModal>
+      <ThemedModal open={modal === "goal"} onClose={() => { setModal(null); setEditItem(null); }} title={editItem ? "Modifier" : "Nouvel objectif"}><GoalForm item={editItem} onDone={() => { setModal(null); setEditItem(null); }} /></ThemedModal>
+      <ThemedModal open={modal === "split"} onClose={() => setModal(null)} title="Mon Profil Budget"><SplitEditor onDone={() => setModal(null)} /></ThemedModal>
     </div>
   );
 }

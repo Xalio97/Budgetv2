@@ -14,6 +14,56 @@ const emptyData = () => ({
 });
 
 const uid = () => Math.random().toString(36).slice(2, 10);
+const APP_VERSION = "1.0";
+
+// ─── Theme System ───────────────────────────────────────────
+const THEME_KEY = "budgetflow-theme";
+
+const themes = {
+  light: {
+    bg: "#f8fafc", bgAlt: "#f0fdf4", bgCard: "#fff", bgCardHover: "#f9fafb",
+    bgModal: "#fff", bgInput: "#fff", bgNav: "rgba(255,255,255,0.92)",
+    bgHeader: "linear-gradient(135deg, #059669, #10b981, #34d399)",
+    bgHeaderOverlay: "rgba(255,255,255,0.08)",
+    bgOnboarding: "linear-gradient(180deg, #f8fafc 0%, #f0fdf4 40%, #ecfdf5 100%)",
+    text: "#0f172a", textSub: "#334155", textMuted: "#64748b", textFaint: "#94a3b8",
+    border: "#e2e8f0", borderLight: "#f1f5f9", borderGreen: "#bbf7d0",
+    inputBorder: "#e2e8f0", inputBg: "#fff",
+    pillBg: "#f1f5f9", pillActive: "#fff", pillActiveText: "#059669", pillText: "#94a3b8",
+    closeBg: "#f1f5f9", closeText: "#64748b",
+    successBg: "#dcfce7", successBorder: "#86efac", successText: "#166534",
+    warningBg: "#fffbeb", warningBorder: "#fde68a", warningText: "#92400e",
+    dangerBg: "#fef2f2", dangerBorder: "#fecaca", dangerText: "#dc2626",
+    selectBg: "#fff",
+    cardShadow: "0 2px 12px rgba(0,0,0,0.04)",
+    nutsy: { bubble: "linear-gradient(135deg, #f0fdf4, #ecfdf5)", bubbleBorder: "#bbf7d0", bubbleText: "#166534" },
+    loisirsGradient: "linear-gradient(135deg, #fffbeb, #fef3c7)", loisirsBorder: "#fde68a",
+    previewBg: "linear-gradient(135deg, #f8fafc, #f0fdf4)", previewBorder: "#e2e8f0",
+    toggleIcon: "🌙",
+  },
+  dark: {
+    bg: "#0f172a", bgAlt: "#1e293b", bgCard: "#1e293b", bgCardHover: "#334155",
+    bgModal: "#1e293b", bgInput: "#0f172a", bgNav: "rgba(15,23,42,0.95)",
+    bgHeader: "linear-gradient(135deg, #064e3b, #065f46, #047857)",
+    bgHeaderOverlay: "rgba(0,0,0,0.15)",
+    bgOnboarding: "linear-gradient(180deg, #0f172a 0%, #1e293b 40%, #1e293b 100%)",
+    text: "#f1f5f9", textSub: "#cbd5e1", textMuted: "#94a3b8", textFaint: "#64748b",
+    border: "#334155", borderLight: "#1e293b", borderGreen: "#065f46",
+    inputBorder: "#475569", inputBg: "#0f172a",
+    pillBg: "#334155", pillActive: "#1e293b", pillActiveText: "#34d399", pillText: "#64748b",
+    closeBg: "#334155", closeText: "#94a3b8",
+    successBg: "#064e3b", successBorder: "#065f46", successText: "#6ee7b7",
+    warningBg: "#451a03", warningBorder: "#78350f", warningText: "#fbbf24",
+    dangerBg: "#450a0a", dangerBorder: "#7f1d1d", dangerText: "#fca5a5",
+    selectBg: "#0f172a",
+    cardShadow: "0 2px 12px rgba(0,0,0,0.3)",
+    nutsy: { bubble: "linear-gradient(135deg, #064e3b, #065f46)", bubbleBorder: "#065f46", bubbleText: "#6ee7b7" },
+    loisirsGradient: "linear-gradient(135deg, #451a03, #78350f)", loisirsBorder: "#78350f",
+    previewBg: "linear-gradient(135deg, #1e293b, #0f172a)", previewBorder: "#334155",
+    toggleIcon: "☀️",
+  },
+};
+
 
 // ─── Nutsy Mascot (inspired by kawaii squirrel with coin & money bag) ────
 const Nutsy = ({ size = 48, message, mood = "happy" }) => (
@@ -76,9 +126,9 @@ const Nutsy = ({ size = 48, message, mood = "happy" }) => (
     </svg>
     {message && (
       <div style={{
-        background: "linear-gradient(135deg, #f0fdf4, #ecfdf5)",
-        border: "1px solid #bbf7d0", borderRadius: 14,
-        padding: "10px 16px", fontSize: 13.5, color: "#166534",
+        background: T.nutsy.bubble,
+        border: `1px solid ${T.nutsy.bubbleBorder}`, borderRadius: 14,
+        padding: "10px 16px", fontSize: 13.5, color: T.nutsy.bubbleText,
         maxWidth: 260, lineHeight: 1.55, position: "relative",
       }}>
         <div style={{
@@ -86,7 +136,7 @@ const Nutsy = ({ size = 48, message, mood = "happy" }) => (
           width: 0, height: 0,
           borderTop: "6px solid transparent",
           borderBottom: "6px solid transparent",
-          borderRight: "6px solid #bbf7d0",
+          borderRight: `6px solid ${T.nutsy.bubbleBorder}`,
         }} />
         {message}
       </div>
@@ -214,20 +264,20 @@ const EXPENSE_SUBS = {
 const fmt = (n) => n.toLocaleString("fr-FR", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
 // ─── Styled ─────────────────────────────────────────────────
-const inputStyle = { width: "100%", padding: "12px 14px", border: "2px solid #e2e8f0", borderRadius: 12, fontSize: 14, fontFamily: "'DM Sans', sans-serif", outline: "none", boxSizing: "border-box", transition: "border-color 0.2s" };
-const selectStyle = { ...inputStyle, appearance: "none", background: "#fff url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%2394a3b8' stroke-width='2'/%3E%3C/svg%3E\") right 12px center no-repeat" };
-const labelStyle = { fontSize: 12, fontWeight: 600, color: "#64748b", marginBottom: 4, display: "block" };
+const inputStyle = { width: "100%", padding: "12px 14px", border: `2px solid ${T.inputBorder}`, borderRadius: 12, fontSize: 14, fontFamily: "'DM Sans', sans-serif", outline: "none", boxSizing: "border-box", transition: "border-color 0.2s", background: T.inputBg, color: T.text };
+const selectStyle = { ...inputStyle, appearance: "none", background: `${T.selectBg} url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%2394a3b8' stroke-width='2'/%3E%3C/svg%3E") right 12px center no-repeat` };
+const labelStyle = { fontSize: 12, fontWeight: 600, color: T.textMuted, marginBottom: 4, display: "block" };
 const btnPrimary = { background: "linear-gradient(135deg, #10b981, #059669)", color: "#fff", border: "none", borderRadius: 14, padding: "14px 24px", fontSize: 15, fontWeight: 700, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", width: "100%", letterSpacing: 0.3 };
-const btnSecondary = { background: "transparent", color: "#64748b", border: "2px solid #e2e8f0", borderRadius: 14, padding: "12px 24px", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", width: "100%" };
+const btnSecondary = { background: "transparent", color: T.textMuted, border: `2px solid ${T.border}`, borderRadius: 14, padding: "12px 24px", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", width: "100%" };
 
 const Modal = ({ open, onClose, title, children }) => {
   if (!open) return null;
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.45)", backdropFilter: "blur(6px)", zIndex: 1000, display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
-      <div onClick={e => e.stopPropagation()} style={{ background: "#fff", borderRadius: "24px 24px 0 0", width: "100%", maxWidth: 480, maxHeight: "85vh", overflow: "auto", padding: "28px 24px 32px", animation: "slideUp 0.3s ease" }}>
+      <div onClick={e => e.stopPropagation()} style={{ background: T.bgModal, borderRadius: "24px 24px 0 0", width: "100%", maxWidth: 480, maxHeight: "85vh", overflow: "auto", padding: "28px 24px 32px", animation: "slideUp 0.3s ease" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-          <h3 style={{ margin: 0, fontSize: 18, color: "#0f172a", fontFamily: "'Sora', sans-serif" }}>{title}</h3>
-          <button onClick={onClose} style={{ background: "#f1f5f9", border: "none", borderRadius: 12, width: 36, height: 36, cursor: "pointer", fontSize: 18, color: "#64748b", display: "grid", placeItems: "center" }}>✕</button>
+          <h3 style={{ margin: 0, fontSize: 18, color: T.text, fontFamily: "'Sora', sans-serif" }}>{title}</h3>
+          <button onClick={onClose} style={{ background: T.closeBg, border: "none", borderRadius: 12, width: 36, height: 36, cursor: "pointer", fontSize: 18, color: T.closeText, display: "grid", placeItems: "center" }}>✕</button>
         </div>
         {children}
       </div>
@@ -237,9 +287,9 @@ const Modal = ({ open, onClose, title, children }) => {
 
 const Card = ({ children, style: s = {}, delay = 0 }) => (
   <div style={{
-    background: "#fff", borderRadius: 20, padding: "20px",
+    background: T.bgCard, borderRadius: 20, padding: "20px",
     boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03)",
-    border: "1px solid #f1f5f9",
+    border: `1px solid ${T.borderLight}`, boxShadow: T.cardShadow,
     animation: `cardIn 0.5s ease ${delay}ms both`, ...s,
   }}>{children}</div>
 );
@@ -686,7 +736,7 @@ const OnboardingFlow = ({ onComplete }) => {
               ))}
             </div>
             {remaining > 0 && (
-              <div style={{ background: "#fff", borderRadius: 18, padding: 20, border: "1px solid #f1f5f9", display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <div style={{ background: "#fff", borderRadius: 18, padding: 20, border: `1px solid ${T.borderLight}`, boxShadow: T.cardShadow, display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <DonutChart size={140} thickness={24} centerLabel="Reste" centerValue={`${fmt(remaining)}€`}
                   segments={remaining > 0 ? [
                     { pct: (Math.min(splitRule.epargneFixed || 0, remaining) / remaining) * 100, color: "#10b981" },
@@ -726,7 +776,29 @@ const OnboardingFlow = ({ onComplete }) => {
 // ═══════════════════════════════════════════════════════════════
 // MAIN APP
 // ═══════════════════════════════════════════════════════════════
-export default function BudgetFlowApp() {
+function ThemeToggle({ theme, onToggle }) {
+  return (
+    <button onClick={onToggle} style={{
+      background: theme === "dark" ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)",
+      border: "none", borderRadius: 10, width: 36, height: 36,
+      display: "grid", placeItems: "center", cursor: "pointer", fontSize: 18,
+      transition: "all 0.3s",
+    }} title={theme === "dark" ? "Mode clair" : "Mode sombre"}>
+      {theme === "dark" ? "☀️" : "🌙"}
+    </button>
+  );
+}
+
+function BudgetFlowMain({ authUser, onLogout }) {
+  const [themeMode, setThemeMode] = useState(() => {
+    try { return localStorage.getItem(THEME_KEY) || "light"; } catch { return "light"; }
+  });
+  const T = themes[themeMode] || themes.light;
+  const toggleTheme = () => {
+    const next = themeMode === "light" ? "dark" : "light";
+    setThemeMode(next);
+    try { localStorage.setItem(THEME_KEY, next); } catch {}
+  };
   const [data, setData] = useState(null);
   const [onboarded, setOnboarded] = useState(null);
   const [view, setView] = useState("dashboard");
@@ -919,19 +991,19 @@ export default function BudgetFlowApp() {
         )}
 
         {/* Live preview */}
-        <div style={{ background: "linear-gradient(135deg, #f8fafc, #f0fdf4)", borderRadius: 16, padding: 16, border: "1px solid #e2e8f0" }}>
+        <div style={{ background: T.previewBg, borderRadius: 16, padding: 16, border: `1px solid ${T.previewBorder}` }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: "#64748b", textTransform: "uppercase", marginBottom: 10 }}>Aperçu mensuel</div>
           {[
             { l: "Épargne", v: previewEp, c: "#10b981", i: "🏦" },
             { l: "Investissement", v: previewInv, c: "#3b82f6", i: "📈" },
           ].map(x => (
-            <div key={x.l} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 0", borderBottom: "1px solid #f1f5f9" }}>
-              <span style={{ fontSize: 13, color: "#475569" }}>{x.i} {x.l}</span>
+            <div key={x.l} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 0", borderBottom: `1px solid ${T.borderLight}` }}>
+              <span style={{ fontSize: 13, color: T.textSub }}>{x.i} {x.l}</span>
               <span style={{ fontSize: 14, fontWeight: 700, color: x.c, fontFamily: "'Sora', sans-serif" }}>-{fmt(x.v)}€</span>
             </div>
           ))}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0 0", marginTop: 4 }}>
-            <span style={{ fontSize: 14, fontWeight: 700, color: "#0f172a" }}>🎉 Disponible loisirs & projets</span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: T.text }}>🎉 Disponible loisirs & projets</span>
             <span style={{ fontSize: 18, fontWeight: 800, color: previewDispo > 0 ? "#f59e0b" : "#ef4444", fontFamily: "'Sora', sans-serif" }}>{fmt(previewDispo)}€</span>
           </div>
         </div>
@@ -955,24 +1027,29 @@ export default function BudgetFlowApp() {
   const navItems = [{ id: "dashboard", icon: "📊", label: "Accueil" },{ id: "incomes", icon: "💰", label: "Revenus" },{ id: "expenses", icon: "💸", label: "Dépenses" },{ id: "goals", icon: "🎯", label: "Objectifs" },{ id: "profil", icon: "⚙️", label: "Profil" }];
 
   return (
-    <div style={{ fontFamily: "'DM Sans', sans-serif", background: "linear-gradient(180deg, #f8fafc 0%, #f0fdf4 50%, #f8fafc 100%)", minHeight: "100vh", maxWidth: 480, margin: "0 auto", position: "relative", paddingBottom: 80 }}>
+    <div style={{ fontFamily: "'DM Sans', sans-serif", background: T.bg, minHeight: "100vh", transition: "background 0.3s", maxWidth: 480, margin: "0 auto", position: "relative", paddingBottom: 80 }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Sora:wght@400;600;700;800&display=swap');
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         @keyframes cardIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-        * { box-sizing: border-box; } input:focus, select:focus { border-color: #10b981 !important; }
+        * { box-sizing: border-box; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+        input:focus, select:focus { border-color: #10b981 !important; }
         ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
       `}</style>
 
       {/* Header */}
-      <div style={{ background: "linear-gradient(135deg, #059669, #10b981, #34d399)", padding: "20px 20px 28px", borderRadius: "0 0 28px 28px", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: -40, right: -40, width: 140, height: 140, borderRadius: "50%", background: "rgba(255,255,255,0.08)" }} />
+      <div style={{ background: T.bgHeader, padding: "20px 20px 28px", borderRadius: "0 0 28px 28px", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: -40, right: -40, width: 140, height: 140, borderRadius: "50%", background: T.bgHeaderOverlay }} />
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}><span style={{ fontSize: 22 }}>🐿️</span><h1 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: "#fff", fontFamily: "'Sora', sans-serif" }}>BudgetFlow</h1></div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}><span style={{ fontSize: 22 }}>🐿️</span><h1 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: "#fff", fontFamily: "'Sora', sans-serif" }}>BudgetFlow</h1><span style={{ background: "rgba(255,255,255,0.25)", color: "#fff", fontSize: 9, fontWeight: 700, padding: "2px 6px", borderRadius: 6, marginLeft: 4 }}>v{APP_VERSION}</span></div>
             <p style={{ margin: 0, fontSize: 13, color: "rgba(255,255,255,0.8)" }}>Bonjour {data.userName} !</p>
           </div>
-          <button onClick={resetAll} style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 12, padding: "8px 12px", color: "#fff", fontSize: 11, cursor: "pointer" }}>↻ Reset</button>
+          <div style={{ display: "flex", gap: 6 }}>
+              <ThemeToggle theme={themeMode} onToggle={toggleTheme} />
+              <button onClick={resetAll} style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 12, padding: "8px 10px", color: "#fff", fontSize: 11, cursor: "pointer" }}>↻</button>
+              <button onClick={onLogout} style={{ background: "rgba(239,68,68,0.3)", border: "1px solid rgba(239,68,68,0.3)", borderRadius: 12, padding: "8px 10px", color: "#fff", fontSize: 11, cursor: "pointer" }}>⏻</button>
+            </div>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginTop: 20 }}>
           {[{ label: "Revenus", value: `${fmt(totalIncome)}€`, bg: "rgba(255,255,255,0.15)" },{ label: "Dépenses", value: `${fmt(totalExpense)}€`, bg: "rgba(255,255,255,0.12)" },{ label: "Reste", value: `${fmt(remaining)}€`, bg: remaining >= 0 ? "rgba(255,255,255,0.2)" : "rgba(239,68,68,0.3)" }].map((c, i) => (
@@ -984,7 +1061,7 @@ export default function BudgetFlowApp() {
         </div>
       </div>
 
-      <div style={{ padding: "20px 16px" }}>
+      <div style={{ padding: "20px 16px", color: T.text }}>
         {view === "dashboard" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <Card delay={0}><Nutsy size={44} message={nutsyMsg.msg} mood={nutsyMsg.mood} /></Card>
@@ -1003,7 +1080,7 @@ export default function BudgetFlowApp() {
               ].map((x, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 0", borderBottom: x.bold ? "2px solid #e2e8f0" : "1px solid #f1f5f9" }}>
                   <span style={{ fontSize: 16, width: 24 }}>{x.icon}</span>
-                  <span style={{ flex: 1, fontSize: 13, color: "#475569", fontWeight: x.bold ? 700 : 400 }}>{x.l}</span>
+                  <span style={{ flex: 1, fontSize: 13, color: T.textSub, fontWeight: x.bold ? 700 : 400 }}>{x.l}</span>
                   <span style={{ fontSize: x.bold ? 16 : 14, fontWeight: x.bold ? 800 : 700, color: x.c, fontFamily: "'Sora', sans-serif" }}>
                     {x.v >= 0 ? "" : ""}{fmt(Math.abs(x.v))}€
                   </span>
@@ -1019,15 +1096,15 @@ export default function BudgetFlowApp() {
                 ].map((x, i) => (
                   <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 0" }}>
                     <span style={{ fontSize: 14, width: 24 }}>{x.icon}</span>
-                    <span style={{ flex: 1, fontSize: 13, color: "#475569" }}>{x.l}</span>
+                    <span style={{ flex: 1, fontSize: 13, color: T.textSub }}>{x.l}</span>
                     <span style={{ fontSize: 13, fontWeight: 700, color: x.c }}>-{fmt(x.v)}€</span>
                   </div>
                 ))}
 
                 {/* THE KEY: what's left for fun */}
                 <div style={{
-                  marginTop: 12, background: "linear-gradient(135deg, #fffbeb, #fef3c7)", borderRadius: 14,
-                  padding: "14px 16px", border: "1px solid #fde68a",
+                  marginTop: 12, background: T.loisirsGradient, borderRadius: 14,
+                  padding: "14px 16px", border: `1px solid ${T.loisirsBorder}`,
                   display: "flex", justifyContent: "space-between", alignItems: "center",
                 }}>
                   <div>
@@ -1056,7 +1133,7 @@ export default function BudgetFlowApp() {
                   <DonutChart size={120} thickness={20} centerLabel="Total" centerValue={`${fmt(totalExpense)}€`} segments={expSegments.map(s => ({ pct: s.pct, color: s.color }))} />
                   <div style={{ flex: 1 }}>{expSegments.map(s => (
                     <div key={s.label} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                      <span style={{ fontSize: 16 }}>{s.icon}</span><div style={{ flex: 1 }}><div style={{ fontSize: 12, color: "#475569", fontWeight: 600 }}>{s.label}</div><ProgressBar pct={s.pct} color={s.color} height={6} /></div>
+                      <span style={{ fontSize: 16 }}>{s.icon}</span><div style={{ flex: 1 }}><div style={{ fontSize: 12, color: T.textSub, fontWeight: 600 }}>{s.label}</div><ProgressBar pct={s.pct} color={s.color} height={6} /></div>
                       <span style={{ fontSize: 13, fontWeight: 700 }}>{fmt(s.value)}€</span>
                     </div>
                   ))}</div>
@@ -1068,7 +1145,7 @@ export default function BudgetFlowApp() {
                 <h3 style={{ margin: "0 0 14px", fontSize: 15, fontFamily: "'Sora', sans-serif" }}>Mes objectifs</h3>
                 {data.goals.map(g => { const pct = g.target > 0 ? (g.saved / g.target) * 100 : 0; return (
                   <div key={g.id} style={{ marginBottom: 14 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}><span style={{ fontSize: 13, fontWeight: 600, color: "#334155" }}>{g.icon} {g.name}</span><span style={{ fontSize: 12, color: "#64748b" }}>{fmt(g.saved)}€ / {fmt(g.target)}€</span></div>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}><span style={{ fontSize: 13, fontWeight: 600, color: T.textSub }}>{g.icon} {g.name}</span><span style={{ fontSize: 12, color: "#64748b" }}>{fmt(g.saved)}€ / {fmt(g.target)}€</span></div>
                     <ProgressBar pct={pct} color={pct >= 100 ? "#10b981" : "#3b82f6"} height={8} />
                   </div>
                 ); })}
@@ -1088,7 +1165,7 @@ export default function BudgetFlowApp() {
               <Card key={inc.id} delay={i * 80}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <div><div style={{ fontSize: 14, fontWeight: 700 }}>{inc.name}</div><div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }}><span style={{ background: incomeCategoryColors[inc.category] + "20", color: incomeCategoryColors[inc.category], padding: "2px 8px", borderRadius: 6, fontWeight: 600, fontSize: 11 }}>{inc.category}</span><span style={{ marginLeft: 8 }}>{inc.frequency}</span></div></div>
-                  <div style={{ textAlign: "right" }}><div style={{ fontSize: 17, fontWeight: 800, color: "#059669", fontFamily: "'Sora', sans-serif" }}>+{fmt(inc.amount)}€</div><div style={{ display: "flex", gap: 6, marginTop: 6, justifyContent: "flex-end" }}><button onClick={() => { setEditItem(inc); setModal("income"); }} style={{ background: "#f1f5f9", border: "none", borderRadius: 8, padding: "4px 10px", fontSize: 11, cursor: "pointer" }}>✏️</button><button onClick={() => deleteIncome(inc.id)} style={{ background: "#fef2f2", border: "none", borderRadius: 8, padding: "4px 10px", fontSize: 11, cursor: "pointer" }}>🗑️</button></div></div>
+                  <div style={{ textAlign: "right" }}><div style={{ fontSize: 17, fontWeight: 800, color: "#059669", fontFamily: "'Sora', sans-serif" }}>+{fmt(inc.amount)}€</div><div style={{ display: "flex", gap: 6, marginTop: 6, justifyContent: "flex-end" }}><button onClick={() => { setEditItem(inc); setModal("income"); }} style={{ background: T.pillBg, border: "none", borderRadius: 8, padding: "4px 10px", fontSize: 11, cursor: "pointer" }}>✏️</button><button onClick={() => deleteIncome(inc.id)} style={{ background: "#fef2f2", border: "none", borderRadius: 8, padding: "4px 10px", fontSize: 11, cursor: "pointer" }}>🗑️</button></div></div>
                 </div>
               </Card>
             ))}
@@ -1101,12 +1178,12 @@ export default function BudgetFlowApp() {
               <h2 style={{ margin: 0, fontSize: 20, fontFamily: "'Sora', sans-serif" }}>Mes Dépenses</h2>
               <button onClick={() => { setEditItem(null); setModal("expense"); }} style={{ background: "linear-gradient(135deg, #ef4444, #dc2626)", color: "#fff", border: "none", borderRadius: 14, padding: "10px 18px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>+ Ajouter</button>
             </div>
-            {expSegments.length > 0 && <Card delay={0}><div style={{ display: "flex", gap: 16, alignItems: "center" }}><DonutChart size={120} thickness={20} centerLabel="Total" centerValue={`${fmt(totalExpense)}€`} segments={expSegments.map(s => ({ pct: s.pct, color: s.color }))} /><div style={{ flex: 1 }}>{expSegments.map(s => (<div key={s.label} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}><span style={{ fontSize: 14 }}>{s.icon}</span><span style={{ flex: 1, fontSize: 12, color: "#475569" }}>{s.label}</span><span style={{ fontSize: 13, fontWeight: 700, color: s.color }}>{fmt(s.value)}€</span></div>))}</div></div></Card>}
+            {expSegments.length > 0 && <Card delay={0}><div style={{ display: "flex", gap: 16, alignItems: "center" }}><DonutChart size={120} thickness={20} centerLabel="Total" centerValue={`${fmt(totalExpense)}€`} segments={expSegments.map(s => ({ pct: s.pct, color: s.color }))} /><div style={{ flex: 1 }}>{expSegments.map(s => (<div key={s.label} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}><span style={{ fontSize: 14 }}>{s.icon}</span><span style={{ flex: 1, fontSize: 12, color: T.textSub }}>{s.label}</span><span style={{ fontSize: 13, fontWeight: 700, color: s.color }}>{fmt(s.value)}€</span></div>))}</div></div></Card>}
             {EXPENSE_CATEGORIES.map(cat => {
               const items = data.expenses.filter(e => e.category === cat); if (!items.length) return null;
               return (<div key={cat}>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8, marginTop: 4 }}><span style={{ fontSize: 16 }}>{expenseCategoryIcons[cat]}</span><span style={{ fontSize: 13, fontWeight: 700, color: "#475569", textTransform: "uppercase", letterSpacing: 0.5 }}>{cat}</span><span style={{ fontSize: 12, color: expenseCategoryColors[cat], fontWeight: 700 }}>{fmt(items.reduce((s, e) => s + e.amount, 0))}€</span></div>
-                {items.map((exp, i) => (<Card key={exp.id} delay={i * 60} style={{ marginBottom: 8 }}><div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}><div><div style={{ fontSize: 14, fontWeight: 600 }}>{exp.name}</div><div style={{ fontSize: 11, color: "#94a3b8", marginTop: 2 }}>{exp.sub && <span style={{ background: "#f1f5f9", padding: "1px 6px", borderRadius: 4, marginRight: 6 }}>{exp.sub}</span>}{exp.frequency}</div></div><div style={{ textAlign: "right" }}><div style={{ fontSize: 16, fontWeight: 800, color: "#ef4444", fontFamily: "'Sora', sans-serif" }}>-{fmt(exp.amount)}€</div><div style={{ display: "flex", gap: 6, marginTop: 4, justifyContent: "flex-end" }}><button onClick={() => { setEditItem(exp); setModal("expense"); }} style={{ background: "#f1f5f9", border: "none", borderRadius: 8, padding: "4px 10px", fontSize: 11, cursor: "pointer" }}>✏️</button><button onClick={() => deleteExpense(exp.id)} style={{ background: "#fef2f2", border: "none", borderRadius: 8, padding: "4px 10px", fontSize: 11, cursor: "pointer" }}>🗑️</button></div></div></div></Card>))}
+                <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8, marginTop: 4 }}><span style={{ fontSize: 16 }}>{expenseCategoryIcons[cat]}</span><span style={{ fontSize: 13, fontWeight: 700, color: T.textSub, textTransform: "uppercase", letterSpacing: 0.5 }}>{cat}</span><span style={{ fontSize: 12, color: expenseCategoryColors[cat], fontWeight: 700 }}>{fmt(items.reduce((s, e) => s + e.amount, 0))}€</span></div>
+                {items.map((exp, i) => (<Card key={exp.id} delay={i * 60} style={{ marginBottom: 8 }}><div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}><div><div style={{ fontSize: 14, fontWeight: 600 }}>{exp.name}</div><div style={{ fontSize: 11, color: "#94a3b8", marginTop: 2 }}>{exp.sub && <span style={{ background: T.pillBg, padding: "1px 6px", borderRadius: 4, marginRight: 6 }}>{exp.sub}</span>}{exp.frequency}</div></div><div style={{ textAlign: "right" }}><div style={{ fontSize: 16, fontWeight: 800, color: "#ef4444", fontFamily: "'Sora', sans-serif" }}>-{fmt(exp.amount)}€</div><div style={{ display: "flex", gap: 6, marginTop: 4, justifyContent: "flex-end" }}><button onClick={() => { setEditItem(exp); setModal("expense"); }} style={{ background: T.pillBg, border: "none", borderRadius: 8, padding: "4px 10px", fontSize: 11, cursor: "pointer" }}>✏️</button><button onClick={() => deleteExpense(exp.id)} style={{ background: "#fef2f2", border: "none", borderRadius: 8, padding: "4px 10px", fontSize: 11, cursor: "pointer" }}>🗑️</button></div></div></div></Card>))}
               </div>);
             })}
           </div>
@@ -1124,7 +1201,7 @@ export default function BudgetFlowApp() {
                 <div style={{ display: "flex", gap: 14 }}>
                   <div style={{ width: 56, height: 56, borderRadius: 16, background: pct >= 100 ? "linear-gradient(135deg, #dcfce7, #bbf7d0)" : "linear-gradient(135deg, #ede9fe, #ddd6fe)", display: "grid", placeItems: "center", fontSize: 28, flexShrink: 0 }}>{g.icon}</div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}><div><div style={{ fontSize: 15, fontWeight: 700 }}>{g.name}</div><div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }}>{pct >= 100 ? "🎉 Atteint !" : `~${mo < Infinity ? mo + " mois" : "..."}`}</div></div><div style={{ display: "flex", gap: 4 }}><button onClick={() => { setEditItem(g); setModal("goal"); }} style={{ background: "#f1f5f9", border: "none", borderRadius: 8, padding: "4px 8px", fontSize: 11, cursor: "pointer" }}>✏️</button><button onClick={() => deleteGoal(g.id)} style={{ background: "#fef2f2", border: "none", borderRadius: 8, padding: "4px 8px", fontSize: 11, cursor: "pointer" }}>🗑️</button></div></div>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}><div><div style={{ fontSize: 15, fontWeight: 700 }}>{g.name}</div><div style={{ fontSize: 12, color: "#64748b", marginTop: 2 }}>{pct >= 100 ? "🎉 Atteint !" : `~${mo < Infinity ? mo + " mois" : "..."}`}</div></div><div style={{ display: "flex", gap: 4 }}><button onClick={() => { setEditItem(g); setModal("goal"); }} style={{ background: T.pillBg, border: "none", borderRadius: 8, padding: "4px 8px", fontSize: 11, cursor: "pointer" }}>✏️</button><button onClick={() => deleteGoal(g.id)} style={{ background: "#fef2f2", border: "none", borderRadius: 8, padding: "4px 8px", fontSize: 11, cursor: "pointer" }}>🗑️</button></div></div>
                     <div style={{ margin: "10px 0 4px" }}><ProgressBar pct={pct} color={pct >= 100 ? "#10b981" : "#8b5cf6"} height={12} /></div>
                     <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}><span style={{ fontWeight: 700, color: pct >= 100 ? "#059669" : "#7c3aed", fontFamily: "'Sora', sans-serif" }}>{fmt(g.saved)}€</span><span style={{ color: "#94a3b8" }}>{pct.toFixed(0)}%</span><span style={{ color: "#64748b", fontWeight: 600 }}>{fmt(g.target)}€</span></div>
                   </div>
@@ -1175,7 +1252,7 @@ export default function BudgetFlowApp() {
                 disponibleLoisirs < 50 ? { t: "Ton budget loisirs est serré. Revois tes dépenses non essentielles.", c: "#ef4444" } : null,
               ].filter(Boolean).map((s,i) => (
                 <div key={i} style={{ display: "flex", gap: 10, alignItems: "start", marginBottom: 8, padding: "10px 12px", background: `${s.c}08`, borderRadius: 12, borderLeft: `3px solid ${s.c}` }}>
-                  <span style={{ fontSize: 12 }}>🐿️</span><span style={{ fontSize: 13, color: "#334155", lineHeight: 1.5 }}>{s.t}</span>
+                  <span style={{ fontSize: 12 }}>🐿️</span><span style={{ fontSize: 13, color: T.textSub, lineHeight: 1.5 }}>{s.t}</span>
                 </div>
               ))}
             </Card>
@@ -1184,7 +1261,7 @@ export default function BudgetFlowApp() {
       </div>
 
       {/* Nav */}
-      <div style={{ position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)", width: "100%", maxWidth: 480, background: "rgba(255,255,255,0.92)", backdropFilter: "blur(20px)", borderTop: "1px solid #f1f5f9", display: "flex", justifyContent: "space-around", padding: "8px 0 12px", zIndex: 100 }}>
+      <div style={{ position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)", width: "100%", maxWidth: 480, background: T.bgNav, backdropFilter: "blur(20px)", borderTop: `1px solid ${T.borderLight}`, display: "flex", justifyContent: "space-around", padding: "8px 0 12px", zIndex: 100 }}>
         {navItems.map(n => (
           <button key={n.id} onClick={() => setView(n.id)} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 2, padding: "4px 8px" }}>
             <span style={{ fontSize: 22, filter: view === n.id ? "none" : "grayscale(0.5) opacity(0.6)" }}>{n.icon}</span>
@@ -1204,4 +1281,192 @@ export default function BudgetFlowApp() {
       <Modal open={modal === "split"} onClose={() => setModal(null)} title="Mon Profil Budget"><SplitEditor onDone={() => setModal(null)} /></Modal>
     </div>
   );
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// AUTH — Login / Register / Session
+// ═══════════════════════════════════════════════════════════
+
+const authFetch = async (path, opts = {}) => {
+  const res = await fetch(`/api/auth${path}`, {
+    ...opts,
+    headers: { "Content-Type": "application/json", ...opts.headers },
+    credentials: "include",
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || "Erreur");
+  return data;
+};
+
+function AuthScreen({ onAuth }) {
+  const [mode, setMode] = useState("login"); // "login" | "register"
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const submit = async () => {
+    setError("");
+    if (!email || !password) return setError("Remplis tous les champs");
+    if (mode === "register" && !name) return setError("Nom requis");
+    if (password.length < 8) return setError("Mot de passe : 8 caractères minimum");
+    setLoading(true);
+    try {
+      const body = mode === "register" ? { email, password, name } : { email, password };
+      const res = await authFetch(`/${mode}`, { method: "POST", body: JSON.stringify(body) });
+      onAuth(res.user);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const inputStyle = {
+    width: "100%", padding: "14px 16px", borderRadius: 14,
+    border: `2px solid ${T.border}`, fontSize: 15, outline: "none",
+    fontFamily: "'DM Sans', sans-serif", background: T.bgCard,
+    boxSizing: "border-box", transition: "border 0.2s",
+  };
+  const btnStyle = {
+    width: "100%", padding: "16px", borderRadius: 16,
+    background: "linear-gradient(135deg, #10b981, #059669)",
+    color: "#fff", border: "none", fontSize: 16, fontWeight: 700,
+    cursor: loading ? "wait" : "pointer", fontFamily: "'DM Sans', sans-serif",
+    opacity: loading ? 0.7 : 1,
+  };
+
+  return (
+    <div style={{
+      fontFamily: "'DM Sans', sans-serif",
+      background: "linear-gradient(180deg, #f8fafc 0%, #f0fdf4 40%, #ecfdf5 100%)",
+      minHeight: "100vh", display: "flex", flexDirection: "column",
+      alignItems: "center", justifyContent: "center", padding: 20,
+    }}>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Sora:wght@400;600;700;800&display=swap');`}</style>
+
+      <div style={{ maxWidth: 400, width: "100%", textAlign: "center" }}>
+        {/* Logo */}
+        <div style={{ marginBottom: 32 }}>
+          <NutsyBig size={100} />
+          <h1 style={{
+            margin: "16px 0 4px", fontSize: 28, fontWeight: 800,
+            fontFamily: "'Sora', sans-serif",
+            background: "linear-gradient(135deg, #059669, #10b981)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+          }}>BudgetFlow</h1>
+          <p style={{ margin: 0, fontSize: 14, color: "#64748b" }}>
+            Ton pilote financier personnel 🐿️
+          </p>
+        </div>
+
+        {/* Card */}
+        <div style={{
+          background: T.bgCard, borderRadius: 24, padding: "32px 24px",
+          boxShadow: "0 4px 24px rgba(0,0,0,0.06)", border: `1px solid ${T.borderLight}`, boxShadow: T.cardShadow,
+        }}>
+          {/* Tabs */}
+          <div style={{ display: "flex", marginBottom: 24, background: T.pillBg, borderRadius: 12, padding: 4 }}>
+            {[{ id: "login", label: "Connexion" }, { id: "register", label: "Inscription" }].map(t => (
+              <button key={t.id} onClick={() => { setMode(t.id); setError(""); }}
+                style={{
+                  flex: 1, padding: "10px", borderRadius: 10, border: "none",
+                  background: mode === t.id ? "#fff" : "transparent",
+                  color: mode === t.id ? "#059669" : "#94a3b8",
+                  fontWeight: 700, fontSize: 14, cursor: "pointer",
+                  fontFamily: "'DM Sans', sans-serif",
+                  boxShadow: mode === t.id ? "0 2px 8px rgba(0,0,0,0.06)" : "none",
+                  transition: "all 0.2s",
+                }}>{t.label}</button>
+            ))}
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            {mode === "register" && (
+              <input style={inputStyle} placeholder="Ton prénom" value={name}
+                onChange={e => setName(e.target.value)} />
+            )}
+            <input style={inputStyle} type="email" placeholder="Email" value={email}
+              onChange={e => setEmail(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && submit()} />
+            <input style={inputStyle} type="password" placeholder="Mot de passe" value={password}
+              onChange={e => setPassword(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && submit()} />
+
+            {error && (
+              <div style={{
+                background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 12,
+                padding: "10px 14px", fontSize: 13, color: "#dc2626", textAlign: "left",
+              }}>⚠️ {error}</div>
+            )}
+
+            <button style={btnStyle} onClick={submit} disabled={loading}>
+              {loading ? "..." : mode === "login" ? "Se connecter" : "Créer mon compte"}
+            </button>
+          </div>
+
+          {mode === "register" && (
+            <p style={{ margin: "16px 0 0", fontSize: 12, color: "#94a3b8" }}>
+              Mot de passe : 8 caractères minimum
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
+// MAIN WRAPPER — Auth check → Login or App
+// ═══════════════════════════════════════════════════════════
+
+export default function BudgetFlowApp() {
+  const [authUser, setAuthUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  // Vérifier la session au chargement
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/auth/me", { credentials: "include" });
+        if (res.ok) {
+          const data = await res.json();
+          setAuthUser(data.user);
+        }
+      } catch {}
+      setAuthLoading(false);
+    })();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+    } catch {}
+    setAuthUser(null);
+  };
+
+  // Loading
+  if (authLoading) {
+    return (
+      <div style={{
+        minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
+        fontFamily: "'DM Sans', sans-serif", background: "#f8fafc",
+      }}>
+        <div style={{ textAlign: "center" }}>
+          <NutsyBig size={80} />
+          <p style={{ marginTop: 16, color: "#64748b", fontSize: 14 }}>Connexion...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Pas connecté → Auth screen
+  if (!authUser) {
+    return <AuthScreen onAuth={setAuthUser} />;
+  }
+
+  // Connecté → App
+  return <BudgetFlowMain authUser={authUser} onLogout={handleLogout} />;
 }
